@@ -3,14 +3,13 @@ body {
     font-weight: bold;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
 }
 
 .hercules-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 25vh;
-    max-height: 200px;
     user-select: none;
+    border: #000;
 }
 
 .hercules-card:hover {
@@ -23,80 +22,52 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.card-img-top {
+.image-container {
     width: 100%;
-    height: 60%;
-    object-fit: cover;
+    height: 0;
+    padding-top: 56.25%; /* Relación de aspecto 16:9 */
+    position: relative;
 }
 
-.card-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
+.card-img-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Imagen completa */
+    object-position: top;
+}
+
+.text-container {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    font-size: 0.85em; /* Texto más pequeño */
+    border: #fff;
 }
 
 .card-title {
-    font-size: calc(10px + 0.7vw);
-    text-align: center;
+    font-size: calc(10px + 0.6vw); /* Texto más pequeño, adaptado a la pantalla */
     margin: 0;
 }
 
-.card-text {
-    font-size: calc(8px + 0.5vw);
-    text-align: center;
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 5px 0;
-}
-
-/* Contenedor de la imagen */
-.image-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-/* Estilo del texto */
 .texto {
-    position: absolute;
-    bottom: 43%;
-    left: 5px;
-    font-size: calc(4px + 0.5vw);
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 5px;
+    font-size: calc(8px + 0.4vw); /* Texto "Salud Física" más pequeño */
 }
 
+/* Responsivo */
 @media (max-width: 576px) {
-    .hercules-card {
-        width: 100%;
-        height: 50vh;
-        margin: 10px 0;
+    .image-container {
+        padding-top: 75%; /* Relación de aspecto más alta para pantallas pequeñas */
     }
 
     .card-title {
-        font-size: calc(12px + 3vw);
+        font-size: calc(12px + 1vw);
     }
 
     .texto {
-        font-size: calc(8px + 1vw);
+        font-size: calc(10px + 0.8vw);
     }
-}
-
-@media (min-width: 577px) {
-    .col-md-4 {
-        width: 33.33%;
-    }
-
-    .col-lg-3 {
-        width: 25%;
-    }
-
-    .hercules-card {
-        width: 100%;
-        height: 25vh;
-    }
-
 }
