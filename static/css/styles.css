@@ -3,7 +3,7 @@ body {
     font-weight: bold;
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background: black;
 }
 
 .hercules-card {
@@ -25,7 +25,8 @@ body {
 .image-container {
     width: 100%;
     height: 0;
-    padding-top: 56.25%; /* Relación de aspecto 16:9 */
+    padding-top: 56.25%;
+    /* Relación de aspecto 16:9 */
     position: relative;
 }
 
@@ -35,7 +36,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Imagen completa */
+    object-fit: cover;
+    /* Imagen completa */
     object-position: top;
 }
 
@@ -44,23 +46,27 @@ body {
     color: #fff;
     text-align: center;
     padding: 5px 10px;
-    font-size: 0.85em; /* Texto más pequeño */
+    font-size: 0.85em;
+    /* Texto más pequeño */
     border: #fff;
 }
 
 .card-title {
-    font-size: calc(10px + 0.6vw); /* Texto más pequeño, adaptado a la pantalla */
+    font-size: calc(10px + 0.6vw);
+    /* Texto más pequeño, adaptado a la pantalla */
     margin: 0;
 }
 
 .texto {
-    font-size: calc(8px + 0.4vw); /* Texto "Salud Física" más pequeño */
+    font-size: calc(8px + 0.4vw);
+    /* Texto "Salud Física" más pequeño */
 }
 
 /* Responsivo */
 @media (max-width: 576px) {
     .image-container {
-        padding-top: 75%; /* Relación de aspecto más alta para pantallas pequeñas */
+        padding-top: 75%;
+        /* Relación de aspecto más alta para pantallas pequeñas */
     }
 
     .card-title {
@@ -70,4 +76,25 @@ body {
     .texto {
         font-size: calc(10px + 0.8vw);
     }
+}
+
+.navbar {
+    background: black;
+    padding: 10px 20px;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.LogoTexto {
+    font-size: calc(30px + 1.5vw);
+    color: #fff;
+}
+
+.Loto {
+    height: calc(20px + 1.5vw);
+    width: auto;
 }
