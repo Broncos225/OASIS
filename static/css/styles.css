@@ -80,13 +80,14 @@ body {
 
 .navbar {
     background: black;
-    padding: 10px 20px;
 }
 
 .navbar-brand {
     font-size: 2rem;
     text-transform: uppercase;
     color: #fff;
+    position: relative;
+    
 }
 
 .LogoTexto {
@@ -95,6 +96,49 @@ body {
 }
 
 .Loto {
-    height: calc(20px + 1.5vw);
+    height: calc(30px + 1.5vw);
     width: auto;
+}
+
+.btn-link {
+    font-size: calc(12px + 0.7vw); 
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.underline-animation {
+    position: relative;
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease; /* Cambios suaves de color */
+}
+
+.underline-animation::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px; 
+    left: 50%; 
+    background-color: #ffffff; /* Color inicial del subrayado */
+    transform: translateX(-50%);
+    transition: width 0.3s ease; /* Suavidad de la animación del subrayado */
+}
+
+.underline-animation:hover {
+    color: #ffffff; /* Blanco al pasar el mouse */
+}
+
+.underline-animation:hover::after {
+    width: 100%; /* Subrayado visible al pasar el mouse */
+}
+
+.underline-animation:active {
+    color: #ffffff; /* Texto blanco mientras se presiona */
+}
+
+.underline-animation:active::after {
+    background-color: #ffffff; /* Subrayado blanco mientras se presiona */
+    width: 100%; /* Asegura que se vea completo */
 }
