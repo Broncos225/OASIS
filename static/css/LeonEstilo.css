@@ -1,0 +1,107 @@
+.grid {
+    display: grid;
+    /* Ajustamos la fórmula para incluir el gap en el cálculo */
+    grid-template-columns: repeat(12, calc((100% - 11 * 10px) / 12));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+body {
+    padding-left: 74.5px;
+    padding-right: 74.5px;
+}
+/* Clases para columnas ajustadas considerando el gap */
+.col-1 {
+    grid-column: span 1;
+}
+
+.col-2 {
+    grid-column: span 2;
+}
+
+.col-3 {
+    grid-column: span 3;
+}
+
+.col-4 {
+    grid-column: span 4;
+}
+
+.col-5 {
+    grid-column: span 5;
+}
+
+.col-6 {
+    grid-column: span 6;
+}
+
+.col-7 {
+    grid-column: span 7;
+}
+
+.col-8 {
+    grid-column: span 8;
+}
+
+.col-9 {
+    grid-column: span 9;
+}
+
+.col-10 {
+    grid-column: span 10;
+}
+
+.col-11 {
+    grid-column: span 11;
+}
+
+.col-12 {
+    grid-column: span 12;
+}
+
+/* Clases para filas */
+.row-1 {
+    grid-row: span 1;
+}
+
+.row-2 {
+    grid-row: span 2;
+}
+
+.row-3 {
+    grid-row: span 3;
+}
+
+.row-4 {
+    grid-row: span 4;
+}
+
+/* Estilo para los bloques */
+.block {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 100px;
+    /* Aseguramos que el padding no afecte el ancho total */
+    box-sizing: border-box;
+    width: 100%;
+    color: black;
+}
+
+.title {
+    /* Usa clamp para establecer límites mínimos y máximos */
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    line-height: 1.2;
+    margin: 0;
+    color: black;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.4;
+    margin: 0;
+    color: black;
+    margin-top: 0.5em;
+}

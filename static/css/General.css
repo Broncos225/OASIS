@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+body {
+    font-family: 'Lora', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: #fff;
+}
+
+.navbar {
+    background: black;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: #fff;
+    position: relative;
+    
+}
+
+.LogoTexto {
+    font-size: calc(30px + 1.5vw);
+    color: #fff;
+}
+
+.Loto {
+    height: calc(30px + 1.5vw);
+    width: auto;
+}
+
+.btn-link {
+    font-size: calc(12px + 0.7vw); 
+    color: #fff;
+    text-decoration: none;
+}
+
+.underline-animation {
+    position: relative;
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease; /* Cambios suaves de color */
+}
+
+.underline-animation::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px; 
+    left: 50%; 
+    background-color: #ffffff; /* Color inicial del subrayado */
+    transform: translateX(-50%);
+    transition: width 0.3s ease; /* Suavidad de la animación del subrayado */
+}
+
+.underline-animation:hover {
+    color: #ffffff; /* Blanco al pasar el mouse */
+}
+
+.underline-animation:hover::after {
+    width: 100%; /* Subrayado visible al pasar el mouse */
+}
+
+.underline-animation:active {
+    color: #ffffff; /* Texto blanco mientras se presiona */
+}
+
+.underline-animation:active::after {
+    background-color: #ffffff; /* Subrayado blanco mientras se presiona */
+    width: 100%; /* Asegura que se vea completo */
+}
