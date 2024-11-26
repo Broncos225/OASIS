@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/General.css">
     <link rel="stylesheet" href="static/css/LeonEstilo.css">
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
 </head>
 
 <body>
@@ -41,19 +42,76 @@
             <p class="fs-1 m-0 text-black text-md-start">El León de Nemea</p>
             <p class="fs-5 m-0 text-black text-md-start">Salud Física</p>
         </div>
-        <div class="block col-2">
-
+        <div class="block col-2 row-1 d-flex flex-column justify-content-start  gap-2">
+            <button type="button">Calorías</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarAgua">Lt de Agua</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarPeso">Peso</button>
         </div>
-        <div class="block col-2">
 
+
+        <div class="block col-6">
+            <canvas id="aguaChart" width="400" height="200"></canvas>
+        </div>
+        <div class="block col-6">
+            <canvas id="pesoChart" width="400" height="200"></canvas>
         </div>
     </div>
-    
 
+    <div class="modal fade" id="modalAgregarAgua" tabindex="-1" aria-labelledby="modalAgregarAguaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarAguaLabel">Agregar Registro de Agua</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/AgregarAgua" method="POST">
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label">Fecha:</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad (ml):</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Registro</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="modalAgregarPeso" tabindex="-1" aria-labelledby="modalAgregarPesoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarPesoLabel">Agregar Registro de Peso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/AgregarPeso" method="POST">
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha:</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad (kg):</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar Registro</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="static/js/script.js"></script>
+    <script src="static/js/scriptLeon.js"></script>
 </body>
 
 </html>
