@@ -33,19 +33,39 @@ fetch('/agua-data')
             data: {
                 labels: filteredData.labels,
                 datasets: [{
-                    label: 'Lt de Agua',
+                    label: 'Litros de Agua',
                     data: filteredData.values,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Fondo más suave debajo de la línea
+                    borderColor: 'rgba(54, 162, 235, 1)', // Color de la línea
+                    borderWidth: 3, // Línea más gruesa
+                    pointBackgroundColor: 'rgba(255, 255, 255, 1)', // Fondo de los puntos blanco
+                    pointBorderColor: 'rgba(54, 162, 235, 1)', // Borde de los puntos azul
+                    pointRadius: 5, // Tamaño del punto
+                    tension: 0.4 // Curva suave
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false, // Se adapta al tamaño del contenedor
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'top'
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff', // Texto blanco en la leyenda
+                            font: {
+                                size: 14,
+                                family: 'Lora, sans-serif'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Fondo oscuro del tooltip
+                        titleColor: '#ffffff', // Título blanco
+                        bodyColor: '#ffffff', // Texto del cuerpo blanco
+                        borderColor: 'rgba(54, 162, 235, 1)', // Borde azul del tooltip
+                        borderWidth: 1
                     }
                 },
                 scales: {
@@ -53,7 +73,22 @@ fetch('/agua-data')
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Cantidad (Litros)'
+                            text: 'Cantidad (Litros)',
+                            color: '#ffffff', // Texto blanco del título del eje Y
+                            font: {
+                                size: 16,
+                                family: 'Lora, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            color: '#ffffff', // Texto blanco en las marcas
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Líneas sutiles de la cuadrícula
+                            lineWidth: 1
                         },
                         min: 0,
                         max: 12
@@ -61,22 +96,50 @@ fetch('/agua-data')
                     x: {
                         title: {
                             display: true,
-                            text: 'Fecha'
+                            text: 'Fecha',
+                            color: '#ffffff', // Texto blanco del título del eje X
+                            font: {
+                                size: 16,
+                                family: 'Lora, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            color: '#ffffff', // Texto blanco en las marcas
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Líneas sutiles de la cuadrícula
+                            lineWidth: 1
                         },
                         type: 'time',
                         time: {
                             unit: 'day',
                             displayFormats: {
-                                day: 'dd'
+                                day: 'dd' // Día y mes
                             },
-                            tooltipFormat: 'yyyy-MM-dd'
+                            tooltipFormat: 'dd MMM yyyy' // Tooltip más claro
                         },
                         min: minDateFormatted,
-                        max: maxDateFormatted,
+                        max: maxDateFormatted
                     }
+                },
+                layout: {
+                    padding: {
+                        top: 20,
+                        left: 10,
+                        right: 10,
+                        bottom: 10
+                    }
+                },
+                animation: {
+                    duration: 1200, // Animación suave
+                    easing: 'easeOutQuart'
                 }
             }
         });
+
     })
     .catch(error => console.error('Error:', error));
 
@@ -125,17 +188,37 @@ fetch('/peso-data')
                 datasets: [{
                     label: 'Peso (kg)',
                     data: filteredData.values,
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fondo suave bajo la línea
+                    borderColor: 'rgba(75, 192, 192, 1)', // Color de la línea
+                    borderWidth: 3, // Línea más gruesa
+                    pointBackgroundColor: 'rgba(255, 255, 255, 1)', // Color del punto
+                    pointBorderColor: 'rgba(75, 192, 192, 1)', // Borde del punto
+                    pointRadius: 5, // Tamaño de los puntos
+                    tension: 0.4 // Suavizar la línea
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false, // Permitir que el gráfico se adapte al tamaño del contenedor
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'top'
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff', // Color blanco para el texto de la leyenda
+                            font: {
+                                size: 14, // Tamaño de fuente más grande
+                                family: 'Lora, sans-serif' // Fuente moderna
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Fondo oscuro para el tooltip
+                        titleColor: '#ffffff', // Texto blanco para el título del tooltip
+                        bodyColor: '#ffffff', // Texto blanco para el contenido
+                        borderColor: 'rgba(75, 192, 192, 1)', // Borde en el tooltip
+                        borderWidth: 1
                     }
                 },
                 scales: {
@@ -143,29 +226,73 @@ fetch('/peso-data')
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Peso (kg)'
+                            text: 'Peso (kg)',
+                            color: '#ffffff', // Texto blanco para el título
+                            font: {
+                                size: 16,
+                                family: 'Lora, sans-serif'
+                            }
                         },
-                        min: 0,
-                        max: 150 // Cambia según tu rango esperado
+                        ticks: {
+                            color: '#ffffff', // Texto blanco para los valores
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Líneas del grid sutiles
+                            lineWidth: 1
+                        }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Fecha'
+                            text: 'Fecha',
+                            color: '#ffffff', // Texto blanco para el título
+                            font: {
+                                size: 16,
+                                family: 'Lora, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            color: '#ffffff', // Texto blanco para los valores
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Líneas del grid sutiles
+                            lineWidth: 1
                         },
                         type: 'time',
                         time: {
                             unit: 'day',
                             displayFormats: {
-                                day: 'dd'
+                                day: 'dd' // Formato más amigable de fecha
                             },
-                            tooltipFormat: 'yyyy-MM-dd'
+                            tooltipFormat: 'dd MMM yyyy' // Tooltip con formato claro
                         },
                         min: minDateFormatted,
-                        max: maxDateFormatted,
+                        max: maxDateFormatted
                     }
+                },
+                layout: {
+                    padding: {
+                        top: 20,
+                        left: 10,
+                        right: 10,
+                        bottom: 10
+                    }
+                },
+                animation: {
+                    duration: 1000, // Animación suave
+                    easing: 'easeOutQuart'
                 }
             }
         });
+
+
     })
     .catch(error => console.error('Error:', error));
+
+

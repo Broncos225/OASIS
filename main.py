@@ -22,7 +22,18 @@ def Bitacora():
 
 @app.route('/El Leon de Nemea')
 def Leon():
-    return render_template('Leon.html')
+    conn = get_db_connection()
+
+    pesoActual = conn.execute('SELECT Cantidad FROM Peso ORDER BY Fecha DESC LIMIT 1').fetchone()
+
+    aguaProm = conn.execute('SELECT ROUND(AVG(Cantidad), 2) AS Prom FROM Agua').fetchone()
+
+    IMC = conn.execute('SELECT ROUND((Peso.Cantidad / (Informacion.Altura * Informacion.Altura)), 2) AS IMC FROM Peso, Informacion WHERE Peso.Fecha = (SELECT MAX(Fecha) FROM Peso) AND Informacion.CC = 1000441419').fetchone()
+
+    data = conn.execute('SELECT * FROM Informacion WHERE CC = 1000441419').fetchone()
+    conn.close()
+    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm)
+
 
 # En tu archivo Flask
 @app.route('/agua-data')
