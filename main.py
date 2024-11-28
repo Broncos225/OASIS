@@ -28,11 +28,23 @@ def Leon():
 
     aguaProm = conn.execute('SELECT ROUND(AVG(Cantidad), 2) AS Prom FROM Agua').fetchone()
 
-    IMC = conn.execute('SELECT ROUND((Peso.Cantidad / (Informacion.Altura * Informacion.Altura)), 2) AS IMC FROM Peso, Informacion WHERE Peso.Fecha = (SELECT MAX(Fecha) FROM Peso) AND Informacion.CC = 1000441419').fetchone()
+    IMC = conn.execute("""
+        SELECT ROUND(
+            (Peso.Cantidad / ((Informacion.Estatura / 100.0) * (Informacion.Estatura / 100.0))), 2
+        ) AS IMC
+        FROM Peso
+        JOIN Informacion ON Peso.CC = Informacion.CC
+        WHERE Peso.Fecha = (
+            SELECT MAX(Fecha)
+            FROM Peso
+            WHERE CC = 1000441419
+        )
+        AND Informacion.CC = 1000441419
+    """).fetchone()
 
     data = conn.execute('SELECT * FROM Informacion WHERE CC = 1000441419').fetchone()
     conn.close()
-    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm)
+    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm, IMC=IMC)
 
 
 # En tu archivo Flask
@@ -53,7 +65,7 @@ def agua_data():
 @app.route('/AgregarAgua', methods=['GET', 'POST'])
 def AgregarAgua():
     if request.method == 'POST':
-        fecha = request.form['fecha']
+        fecha = datetime.now().strftime("%Y-%m-%d")
         cantidad = request.form['cantidad']
         
         conn = get_db_connection()
@@ -89,7 +101,7 @@ def AgregarPeso():
         
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO Peso (Fecha, Cantidad) VALUES (?, ?)", (fecha_peso, cantidad_peso))
+        cursor.execute("INSERT INTO Peso (Fecha, Cantidad, CC) VALUES (?, ?, ?)",(fecha_peso, cantidad_peso, '1000441419'))
         conn.commit()
         conn.close()
         

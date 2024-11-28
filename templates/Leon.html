@@ -51,24 +51,24 @@
             <button type="button">Creatina</button>
         </div>
         <div class="block col-2 row-2">
-            <p class="fs-4" style="text-align: center;">Información</p>
+            <p class="fs-4 fw-bold" style="text-align: center;">Información</p>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-bold">Altura:</span>
+                    <span class="fw-bold">Estatura:</span>
                     <span>{{ data.Estatura }} cm</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <span class="fw-bold">Peso actual:</span>
-                    <span>{{ pesoActual.Cantidad }} kg</span> 
+                    <span>{{ pesoActual.Cantidad }} kg</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-bold">Agua:</span>
-                    <span>{{ aguaProm.Prom }} litros</span>
-                </li>           
-                <li class="list-group-item d-flex justify-content-between">
                     <span class="fw-bold">IMC:</span>
-                    <span>{{ aguaProm.Prom }}</span>
-                </li>                
+                    <span>{{ IMC.IMC }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-bold">Prom. de Agua:</span>
+                    <span>{{ aguaProm.Prom }} litros</span>
+                </li>
             </ul>
         </div>
 
@@ -101,11 +101,7 @@
                 <div class="modal-body bg-light">
                     <form action="/AgregarAgua" method="POST">
                         <div class="mb-3">
-                            <label for="fecha" class="form-label fw-semibold">Fecha:</label>
-                            <input type="date" class="form-control rounded-3" id="fecha" name="fecha" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cantidad" class="form-label fw-semibold">Cantidad (ml):</label>
+                            <label for="cantidad" class="form-label text-black fw-semibold">Cantidad (litros):</label>
                             <input type="number" class="form-control rounded-3" id="cantidad" name="cantidad" required>
                         </div>
                         <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
@@ -128,11 +124,11 @@
                 <div class="modal-body bg-light">
                     <form action="/AgregarPeso" method="POST">
                         <div class="mb-3">
-                            <label for="fecha" class="form-label fw-semibold">Fecha:</label>
+                            <label for="fecha" class="form-label text-black fw-semibold">Fecha:</label>
                             <input type="date" class="form-control rounded-3" id="fecha" name="fecha" required>
                         </div>
                         <div class="mb-3">
-                            <label for="cantidad" class="form-label fw-semibold">Cantidad (kg):</label>
+                            <label for="cantidad" class="form-label text-black fw-semibold">Cantidad (kg):</label>
                             <input type="number" class="form-control rounded-3" id="cantidad" name="cantidad" required>
                         </div>
                         <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
