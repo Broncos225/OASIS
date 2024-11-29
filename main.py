@@ -25,8 +25,7 @@ def Leon():
     conn = get_db_connection()
 
     pesoActual = conn.execute('SELECT Cantidad FROM Peso ORDER BY Fecha DESC LIMIT 1').fetchone()
-
-    aguaProm = conn.execute('SELECT ROUND(AVG(Cantidad), 2) AS Prom FROM Agua').fetchone()
+    aguaProm = conn.execute('SELECT IFNULL(ROUND(AVG(Cantidad), 2), 0) AS Prom FROM Agua').fetchone()
 
     IMC = conn.execute("""
         SELECT ROUND(
@@ -41,10 +40,83 @@ def Leon():
         )
         AND Informacion.CC = 1000441419
     """).fetchone()
+    IMC = IMC['IMC'] if IMC else 0
 
+    # Determinar progreso basado en IMC
+    if IMC is None:
+        progreso = 0  # Progreso por defecto si no hay datos
+    else:
+        if IMC < 18.5:
+            progreso = 10
+        elif 18.5 <= IMC < 24.9:
+            progreso = 25
+        elif 24.9 <= IMC < 29.9:
+            progreso = 10
+        else:
+            progreso = 0
+
+
+    # Obtener información general
     data = conn.execute('SELECT * FROM Informacion WHERE CC = 1000441419').fetchone()
     conn.close()
-    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm, IMC=IMC)
+
+    # Renderizar la plantilla con los datos procesados
+    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm, IMC=IMC, progreso=progreso)
+
+@app.route('/progreso')
+def progreso():
+    conn = get_db_connection()
+    
+    # Cálculo del IMC
+    result = conn.execute("""
+        SELECT ROUND(
+            (Peso.Cantidad / ((Informacion.Estatura / 100.0) * (Informacion.Estatura / 100.0))), 2
+        ) AS IMC
+        FROM Peso
+        JOIN Informacion ON Peso.CC = Informacion.CC
+        WHERE Peso.Fecha = (
+            SELECT MAX(Fecha)
+            FROM Peso
+            WHERE CC = 1000441419
+        )
+        AND Informacion.CC = 1000441419
+    """).fetchone()
+    
+    IMC = result['IMC'] if result and 'IMC' in result.keys() else None
+    
+    # Cálculo del promedio de agua
+    aguaProm = conn.execute('SELECT IFNULL(ROUND(AVG(Cantidad), 2), 0) AS Prom FROM Agua').fetchone()
+    promedio_agua = aguaProm['Prom'] if aguaProm else 0
+    
+    # Progreso basado en IMC
+    if IMC is None:
+        progreso_IMC = 0
+    else:
+        # Rango de IMC y cálculo proporcional
+        IMC_min = 18.5
+        IMC_max = 24.9
+        progreso_max = 25
+        if IMC < IMC_min:
+            progreso_IMC = max(0, (IMC_min - IMC) / IMC_min * progreso_max)
+        elif IMC <= IMC_max:
+            progreso_IMC = (IMC - IMC_min) / (IMC_max - IMC_min) * progreso_max
+        else:
+            progreso_IMC = max(0, (IMC - IMC_max) / (30 - IMC_max) * progreso_max)
+
+    # Progreso basado en litros de agua
+    agua_meta = 3.7  # Litros de agua meta
+    progreso_max_agua = 25  # Máximo de 25% para agua
+    if promedio_agua <= 0:
+        progreso_agua = 0
+    else:
+        progreso_agua = min((promedio_agua / agua_meta) * progreso_max_agua, progreso_max_agua)
+
+    # Progreso total (IMC + agua)
+    progreso_total = progreso_IMC + progreso_agua
+    
+    return jsonify({'progreso': progreso_total})
+
+
 
 
 # En tu archivo Flask

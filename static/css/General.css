@@ -246,3 +246,12 @@ canvas {
     color: black;
     margin-top: 0.5em;
 }
+
+
+.progress-bar {
+    background-color: #000;
+}
+
+#barraProgreso {
+    transition: width 2s ease-in-out;
+}

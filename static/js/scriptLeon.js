@@ -242,7 +242,9 @@ fetch('/peso-data')
                         grid: {
                             color: 'rgba(255, 255, 255, 0.2)', // Líneas del grid sutiles
                             lineWidth: 1
-                        }
+                        },
+                        min: 0,
+                        max: 100
                     },
                     x: {
                         title: {
@@ -296,3 +298,39 @@ fetch('/peso-data')
     .catch(error => console.error('Error:', error));
 
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/progreso')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(progreso => {
+            const barraProgreso = document.getElementById('barraProgreso');
+            const progresoFinal = progreso.progreso;
+
+            // Animación gradual del texto
+            let progresoActual = 0;
+            const duracionAnimacion = 2000; // 2 segundos
+            const intervalo = 20; // Actualizar cada 20ms
+
+            const animarTexto = setInterval(() => {
+                progresoActual += (progresoFinal / (duracionAnimacion / intervalo));
+                
+                if (progresoActual >= progresoFinal) {
+                    progresoActual = progresoFinal;
+                    clearInterval(animarTexto);
+                }
+
+                barraProgreso.textContent = `${progresoActual.toFixed(1)}%`;
+            }, intervalo);
+
+            // Animar el ancho de la barra con CSS transition
+            setTimeout(() => {
+                barraProgreso.style.width = `${progresoFinal}%`;
+            }, 50); // Pequeño retraso para asegurar que la transición se aplique
+        })
+        .catch(error => console.error('Error al obtener el progreso:', error));
+});

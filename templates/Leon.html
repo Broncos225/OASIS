@@ -31,16 +31,26 @@
         </div>
     </nav>
 
-
     <!-- Usando Grid -->
     <div class="grid">
         <div class="block col-2">
             <img src="static/images/Leon de Nemea.jpeg" alt="El León de Nemea"
                 class="img-fluid rounded border border-dark border-3">
         </div>
-        <div class="block col-6">
-            <p class="fs-1 m-0 text-black text-md-start">El León de Nemea</p>
-            <p class="fs-5 m-0 text-black text-md-start">Salud Física</p>
+        <div class="block col-6 d-flex flex-column justify-content-between">
+            <div>
+                <p class="fs-1 m-0 text-black text-md-start">El León de Nemea</p>
+                <p class="fs-5 m-0 text-black text-md-start">Salud Física</p>
+            </div>
+            <div>
+                <p class="fs-5 m-0 text-black text-md-start">Progreso</p>
+                <div class="progress">
+                    <div id="barraProgreso" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                        style="width: 0%;">
+                    </div>
+                </div>
+                
+            </div>
         </div>
         <div class="block col-2 row-1 d-flex flex-column justify-content-start  gap-2">
             <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarAgua">Lt de Agua</button>
@@ -53,21 +63,25 @@
         <div class="block col-2 row-2">
             <p class="fs-4 fw-bold" style="text-align: center;">Información</p>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between p-0">
                     <span class="fw-bold">Estatura:</span>
-                    <span>{{ data.Estatura }} cm</span>
+                    <span><b>{{ data.Estatura }}</b> cm</span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between p-0">
                     <span class="fw-bold">Peso actual:</span>
-                    <span>{{ pesoActual.Cantidad }} kg</span>
+                    <span><b>{% if pesoActual != None%}
+                            {{ pesoActual.Cantidad }}</b> kg</span>
+                    {% else %}
+                    0</b> kg</span>
+                    {% endif %}
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between p-0">
                     <span class="fw-bold">IMC:</span>
-                    <span>{{ IMC.IMC }}</span>
+                    <span><b>{{ IMC }}</b></span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between p-0">
                     <span class="fw-bold">Prom. de Agua:</span>
-                    <span>{{ aguaProm.Prom }} litros</span>
+                    <span><b>{{ aguaProm.Prom }}</b> lt</span>
                 </li>
             </ul>
         </div>
@@ -86,6 +100,7 @@
         <div class="block col-5">
             <canvas id="pesoChart"></canvas>
         </div>
+
     </div>
 
     <!-- Modal para Agregar Registro de Agua -->
@@ -102,7 +117,7 @@
                     <form action="/AgregarAgua" method="POST">
                         <div class="mb-3">
                             <label for="cantidad" class="form-label text-black fw-semibold">Cantidad (litros):</label>
-                            <input type="number" class="form-control rounded-3" id="cantidad" name="cantidad" required>
+                            <input type="number" class="form-control rounded-3" step="0.0001" id="cantidad" name="cantidad" required>
                         </div>
                         <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
                     </form>
@@ -129,7 +144,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="cantidad" class="form-label text-black fw-semibold">Cantidad (kg):</label>
-                            <input type="number" class="form-control rounded-3" id="cantidad" name="cantidad" required>
+                            <input type="number" class="form-control rounded-3" step="0.0001" id="cantidad" name="cantidad" required>
                         </div>
                         <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
                     </form>
