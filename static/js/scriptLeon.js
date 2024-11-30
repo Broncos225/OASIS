@@ -186,7 +186,7 @@ fetch('/peso-data')
             data: {
                 labels: filteredData.labels,
                 datasets: [{
-                    label: 'Peso (kg)',
+                    label: 'Peso',
                     data: filteredData.values,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fondo suave bajo la línea
                     borderColor: 'rgba(75, 192, 192, 1)', // Color de la línea
@@ -297,6 +297,152 @@ fetch('/peso-data')
     })
     .catch(error => console.error('Error:', error));
 
+fetch('/vinagre-data')
+    .then(response => response.json())
+    .then(data => {
+        const ctx = document.getElementById('vinagreChart').getContext('2d');
+
+        const labels = data.labels.map(date => {
+            const formattedDate = new Date(date);
+            return formattedDate.toISOString().split('T')[0];
+        });
+
+        const now = new Date();
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+        const minDateFormatted = firstDayOfMonth.toISOString().split('T')[0];
+        const maxDateFormatted = lastDayOfMonth.toISOString().split('T')[0];
+
+        const filteredData = {
+            labels: [],
+            values: []
+        };
+
+        data.labels.forEach((label, index) => {
+            const labelDate = new Date(label).toISOString().split('T')[0];
+            if (labelDate >= minDateFormatted && labelDate <= maxDateFormatted) {
+                filteredData.labels.push(label);
+                filteredData.values.push(data.values[index]);
+            }
+        });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: filteredData.labels,
+                datasets: [{
+                    label: 'Vinagre',
+                    data: filteredData.values,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Fondo suave bajo la línea
+                    borderColor: 'rgba(255, 99, 132, 1)', // Color de la línea
+                    borderWidth: 3, // Línea más gruesa
+                    pointBackgroundColor: 'rgba(255, 255, 255, 1)', // Color del punto
+                    pointBorderColor: 'rgba(255, 99, 132, 1)', // Borde del punto
+                    pointRadius: 5, // Tamaño de los puntos
+                    tension: 0.4 // Suavizar la línea
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Permitir que el gráfico se adapte al tamaño del contenedor
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#ffdddd', // Color rojo claro para el texto de la leyenda
+                            font: {
+                                size: 14, // Tamaño de fuente más grande
+                                family: 'Lora, sans-serif' // Fuente moderna
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(255, 0, 0, 0.7)', // Fondo rojo oscuro para el tooltip
+                        titleColor: '#ffffff', // Texto blanco para el título del tooltip
+                        bodyColor: '#ffffff', // Texto blanco para el contenido
+                        borderColor: 'rgba(255, 99, 132, 1)', // Borde en el tooltip
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'CDA (Cucharadas)',
+                            color: '#ffdddd', // Texto rojo claro para el título
+                            font: {
+                                size: 16,
+                                family: 'Lora, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            color: '#ffdddd', // Texto rojo claro para los valores
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 99, 132, 0.2)', // Líneas del grid sutiles en rojo
+                            lineWidth: 1
+                        },
+                        min: 0,
+                        max: 3
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Fecha',
+                            color: '#ffdddd', // Texto rojo claro para el título
+                            font: {
+                                size: 16,
+                                family: 'Lora, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            color: '#ffdddd', // Texto rojo claro para los valores
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 99, 132, 0.2)', // Líneas del grid sutiles en rojo
+                            lineWidth: 1
+                        },
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'dd' // Formato más amigable de fecha
+                            },
+                            tooltipFormat: 'dd MMM yyyy' // Tooltip con formato claro
+                        },
+                        min: minDateFormatted,
+                        max: maxDateFormatted
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 20,
+                        left: 10,
+                        right: 10,
+                        bottom: 10
+                    }
+                },
+                animation: {
+                    duration: 1000, // Animación suave
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    })
+    .catch(error => console.error('Error:', error));
+
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -318,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const animarTexto = setInterval(() => {
                 progresoActual += (progresoFinal / (duracionAnimacion / intervalo));
-                
+
                 if (progresoActual >= progresoFinal) {
                     progresoActual = progresoFinal;
                     clearInterval(animarTexto);

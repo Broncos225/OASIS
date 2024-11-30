@@ -45,29 +45,30 @@
             <div>
                 <p class="fs-5 m-0 text-black text-md-start">Progreso</p>
                 <div class="progress">
-                    <div id="barraProgreso" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                        style="width: 0%;">
+                    <div id="barraProgreso" class="progress-bar" role="progressbar" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 0%;">
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="block col-2 row-1 d-flex flex-column justify-content-start  gap-2">
-            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarAgua">Lt de Agua</button>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarPeso">Peso</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarAgua">Agua</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarVinagre">Vinagre</button>
         </div>
         <div class="block col-2 row-1 d-flex flex-column justify-content-start  gap-2">
-            <button type="button">Vinagre</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarPeso">Peso</button>
+
             <button type="button">Creatina</button>
         </div>
-        <div class="block col-2 row-2">
+        <div class="block col-2 row-3">
             <p class="fs-4 fw-bold" style="text-align: center;">Información</p>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between p-0">
+                <li class="list-group-item d-flex justify-content-between ">
                     <span class="fw-bold">Estatura:</span>
                     <span><b>{{ data.Estatura }}</b> cm</span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between p-0">
+                <li class="list-group-item d-flex justify-content-between ">
                     <span class="fw-bold">Peso actual:</span>
                     <span><b>{% if pesoActual != None%}
                             {{ pesoActual.Cantidad }}</b> kg</span>
@@ -75,13 +76,17 @@
                     0</b> kg</span>
                     {% endif %}
                 </li>
-                <li class="list-group-item d-flex justify-content-between p-0">
+                <li class="list-group-item d-flex justify-content-between ">
                     <span class="fw-bold">IMC:</span>
                     <span><b>{{ IMC }}</b></span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between p-0">
-                    <span class="fw-bold">Prom. de Agua:</span>
+                <li class="list-group-item d-flex justify-content-between ">
+                    <span class="fw-bold">Agua:</span>
                     <span><b>{{ aguaProm.Prom }}</b> lt</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between ">
+                    <span class="fw-bold">Vinagre:</span>
+                    <span><b>{{ vinagreProm.Prom }}</b> CDA</span>
                 </li>
             </ul>
         </div>
@@ -100,6 +105,9 @@
         <div class="block col-5">
             <canvas id="pesoChart"></canvas>
         </div>
+        <div class="block col-5">
+            <canvas id="vinagreChart"></canvas>
+        </div>
 
     </div>
 
@@ -117,7 +125,8 @@
                     <form action="/AgregarAgua" method="POST">
                         <div class="mb-3">
                             <label for="cantidad" class="form-label text-black fw-semibold">Cantidad (litros):</label>
-                            <input type="number" class="form-control rounded-3" step="0.0001" id="cantidad" name="cantidad" required>
+                            <input type="number" class="form-control rounded-3" step="0.1" id="cantidad"
+                                name="cantidad" required>
                         </div>
                         <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
                     </form>
@@ -144,7 +153,32 @@
                         </div>
                         <div class="mb-3">
                             <label for="cantidad" class="form-label text-black fw-semibold">Cantidad (kg):</label>
-                            <input type="number" class="form-control rounded-3" step="0.0001" id="cantidad" name="cantidad" required>
+                            <input type="number" class="form-control rounded-3" step="0.01" id="cantidad"
+                                name="cantidad" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Agregar Registro de Vinagre -->
+    <div class="modal fade" id="modalAgregarVinagre" tabindex="-1" aria-labelledby="modalAgregarVinagreLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-dark text-white rounded-top-4">
+                    <h5 class="modal-title" id="modalAgregarVinagreLabel">Agregar Registro de Vinagre</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-light">
+                    <form action="/AgregarVinagre" method="POST">
+                        <div class="mb-3">
+                            <label for="CDA" class="form-label text-black fw-semibold">Cucharadas</label>
+                            <input type="number" class="form-control rounded-3" id="CDA" name="CDA"
+                                required>
                         </div>
                         <button type="submit" class="btn btn-dark w-100 rounded-3">Agregar Registro</button>
                     </form>

@@ -26,6 +26,7 @@ def Leon():
 
     pesoActual = conn.execute('SELECT Cantidad FROM Peso ORDER BY Fecha DESC LIMIT 1').fetchone()
     aguaProm = conn.execute('SELECT IFNULL(ROUND(AVG(Cantidad), 2), 0) AS Prom FROM Agua').fetchone()
+    vinagreProm = conn.execute('SELECT IFNULL(ROUND(AVG(CDA), 2), 0) AS Prom FROM Vinagre').fetchone()
 
     IMC = conn.execute("""
         SELECT ROUND(
@@ -42,26 +43,13 @@ def Leon():
     """).fetchone()
     IMC = IMC['IMC'] if IMC else 0
 
-    # Determinar progreso basado en IMC
-    if IMC is None:
-        progreso = 0  # Progreso por defecto si no hay datos
-    else:
-        if IMC < 18.5:
-            progreso = 10
-        elif 18.5 <= IMC < 24.9:
-            progreso = 25
-        elif 24.9 <= IMC < 29.9:
-            progreso = 10
-        else:
-            progreso = 0
-
 
     # Obtener información general
     data = conn.execute('SELECT * FROM Informacion WHERE CC = 1000441419').fetchone()
     conn.close()
 
     # Renderizar la plantilla con los datos procesados
-    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm, IMC=IMC, progreso=progreso)
+    return render_template('Leon.html', data=data, pesoActual=pesoActual, aguaProm=aguaProm, IMC=IMC, vinagreProm=vinagreProm)
 
 @app.route('/progreso')
 def progreso():
@@ -81,18 +69,20 @@ def progreso():
         )
         AND Informacion.CC = 1000441419
     """).fetchone()
-    
     IMC = result['IMC'] if result and 'IMC' in result.keys() else None
-    
+
     # Cálculo del promedio de agua
     aguaProm = conn.execute('SELECT IFNULL(ROUND(AVG(Cantidad), 2), 0) AS Prom FROM Agua').fetchone()
     promedio_agua = aguaProm['Prom'] if aguaProm else 0
-    
+
+    # Cálculo del promedio de cucharadas de vinagre
+    vinagreProm = conn.execute('SELECT IFNULL(ROUND(AVG(CDA), 2), 0) AS Prom FROM Vinagre').fetchone()
+    promedio_vinagre = vinagreProm['Prom'] if vinagreProm else 0
+
     # Progreso basado en IMC
     if IMC is None:
         progreso_IMC = 0
     else:
-        # Rango de IMC y cálculo proporcional
         IMC_min = 18.5
         IMC_max = 24.9
         progreso_max = 25
@@ -104,17 +94,29 @@ def progreso():
             progreso_IMC = max(0, (IMC - IMC_max) / (30 - IMC_max) * progreso_max)
 
     # Progreso basado en litros de agua
-    agua_meta = 3.7  # Litros de agua meta
-    progreso_max_agua = 25  # Máximo de 25% para agua
+    agua_meta = 3.7
+    progreso_max_agua = 25
     if promedio_agua <= 0:
         progreso_agua = 0
     else:
         progreso_agua = min((promedio_agua / agua_meta) * progreso_max_agua, progreso_max_agua)
 
-    # Progreso total (IMC + agua)
-    progreso_total = progreso_IMC + progreso_agua
+    # Progreso basado en cucharadas de vinagre
+    vinagre_ideal = 2
+    vinagre_max = 3
+    progreso_max_vinagre = 25
+    if promedio_vinagre < vinagre_ideal:
+        progreso_vinagre = max(0, (promedio_vinagre / vinagre_ideal) * progreso_max_vinagre)
+    elif promedio_vinagre == vinagre_ideal:
+        progreso_vinagre = progreso_max_vinagre
+    elif promedio_vinagre > vinagre_ideal:
+        progreso_vinagre = max(0, (vinagre_max - promedio_vinagre) / (vinagre_max - vinagre_ideal) * progreso_max_vinagre)
+
+    # Progreso total (IMC + agua + vinagre)
+    progreso_total = progreso_IMC + progreso_agua + progreso_vinagre
     
     return jsonify({'progreso': progreso_total})
+
 
 
 
@@ -181,7 +183,35 @@ def AgregarPeso():
     
     return render_template('Leon.html')
 
+@app.route('/vinagre-data')
+def vinagre_data():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT Fecha, CDA FROM Vinagre ORDER BY Fecha")
+    data = cursor.fetchall()
+    conn.close()
 
+    labels = [row['Fecha'] for row in data]  
+    values = [row['CDA'] for row in data]  
+
+    labels = [datetime.strptime(label, "%Y-%m-%d").strftime("%Y-%m-%d") for label in labels]
+    return jsonify({'labels': labels, 'values': values})
+
+@app.route('/AgregarVinagre', methods=['GET', 'POST'])
+def AgregarVinagre():
+    if request.method == 'POST':
+        fecha = datetime.now().strftime("%Y-%m-%d")
+        CDA = request.form['CDA']
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO Vinagre (Fecha, CDA) VALUES (?, ?)", (fecha, CDA))
+        conn.commit()
+        conn.close()
+        
+        return redirect(url_for('Leon'))
+    
+    return render_template('Leon.html')
 
 
 
